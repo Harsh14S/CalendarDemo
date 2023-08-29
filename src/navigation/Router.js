@@ -1,24 +1,28 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet} from 'react-native';
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import HomeScreen from '../screens/Home/HomeScreen';
+import CalendarScreen from '../screens/Calendar/CalendarScreen';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import CustomDrawer from './CustomDrawer';
+import * as Colors from '../assets/colors';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+const Draw = createDrawerNavigator();
 
 const Router = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator
+      <Draw.Navigator
+        drawerContent={props => <CustomDrawer {...props} />}
         screenOptions={{
           headerShown: false,
-          statusBarColor: 'white',
-          contentStyle: {backgroundColor: 'white'},
-          statusBarStyle: 'dark',
+          sceneContainerStyle: {backgroundColor: Colors.white},
+          swipeEnabled: false,
         }}>
-        <Stack.Screen name="Home" component={HomeScreen} />
-      </Stack.Navigator>
+        <Draw.Screen name="Calendar" component={CalendarScreen} />
+      </Draw.Navigator>
     </NavigationContainer>
   );
 };

@@ -1,33 +1,24 @@
-import {
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-} from 'react-native';
-import React, {useState} from 'react';
-import {CameraRoll} from '@react-native-camera-roll/camera-roll';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React from 'react';
 
-const HomeScreen = () => {
-  const [allPhotoes, setAllPhotoes] = useState();
-  _handleButtonPress = () => {
-    CameraRoll.getPhotos({
-      first: 20,
-      assetType: 'Photos',
-    })
-      .then(r => {
-        console.log('Photoes ----> ', JSON.stringify(r.edges));
-        // setAllPhotoes(r.edges)
-      })
-      .catch(err => {
-        //Error Loading Images
-      });
-  };
+const HomeScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.btn} onPress={() => _handleButtonPress()}>
-        <Text>HomeScreen</Text>
-      </TouchableOpacity>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>{'Home'}</Text>
+      </View>
+      <View style={styles.mainContainer}>
+        <TouchableOpacity
+          style={styles.screenBtn}
+          onPress={() => navigation.navigate('Calendar')}>
+          <Text style={styles.screenBtnTxt}>{'Calendar'}</Text>
+        </TouchableOpacity>
+        {/* <TouchableOpacity
+          style={styles.screenBtn}
+          onPress={() => navigation.navigate('Gallery')}>
+          <Text style={styles.screenBtnTxt}>{'Gallery'}</Text>
+        </TouchableOpacity> */}
+      </View>
     </View>
   );
 };
@@ -37,12 +28,39 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
-  btn: {
+  header: {
     backgroundColor: 'lightgrey',
-    borderWidth: 1,
-    padding: 10,
+    flexDirection: 'row',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    justifyContent: 'center',
+    marginBottom: 10,
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: 'black',
+  },
+  mainContainer: {
+    flex: 1,
+    paddingTop: 20,
+    paddingHorizontal: 20,
+    justifyContent: 'center',
+  },
+  screenBtn: {
+    width: '100%',
+    backgroundColor: 'lightblue',
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    marginBottom: 15,
+    borderRadius: 5,
+  },
+  screenBtnTxt: {
+    fontSize: 15,
+    fontWeight: '500',
+    color: 'black',
+    textAlign: 'center',
+    textAlignVertical: 'center',
   },
 });
