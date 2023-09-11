@@ -11,6 +11,7 @@ import {weekDays} from './CalendarData';
 import {CalendarContext} from '../../../global/CalendarContext';
 import moment from 'moment';
 import * as Colors from '../../assets/colors';
+import {RFValue} from 'react-native-responsive-fontsize';
 
 const {width, height} = Dimensions.get('screen');
 const itemWidth = width / 8.1;
@@ -43,28 +44,34 @@ export default CalendarMonthComponent = () => {
     const isCurrentMonth =
       moment(new Date()).format('MMMM') === moment(time).format('MMMM') &&
       moment(new Date()).format('YYYY') === moment(time).format('YYYY');
-    console.log('isCurrentMonth ----> ', isCurrentMonth);
 
     const emptyAdds = Number(moment(_time).format('d'));
     const lastMonthDays = Number(
       moment(time).subtract(1, 'month').daysInMonth(),
     );
     const nextMonthDays = Number(moment(time).add(1, 'month').daysInMonth());
-    console.log('lastMonthDays ---> ', lastMonthDays);
-    console.log('nextMonthDays ---> ', nextMonthDays);
     const remainAdds =
       Number(7 - ((emptyAdds + totalDays) % 7)) === 7
         ? 0
         : Number(7 - ((emptyAdds + totalDays) % 7));
     let arr = [
-      ...new Array(emptyAdds).fill(false),
+      ...new Array(emptyAdds).fill(0).map((item, index) => {
+        return {
+          date: lastMonthDays - emptyAdds + (index + 1),
+          isToday: false,
+          isCurrentMonth: false,
+        };
+      }),
       ...new Array(totalDays).fill(0).map((item, index) => {
         return {
           date: index + 1,
-          today: new Date().getDate() === index + 1 && isCurrentMonth,
+          isToday: new Date().getDate() === index + 1 && isCurrentMonth,
+          isCurrentMonth: true,
         };
       }),
-      ...new Array(remainAdds).fill(false),
+      ...new Array(remainAdds).fill(0).map((item, index) => {
+        return {date: index + 1, isToday: false, isCurrentMonth: false};
+      }),
     ];
 
     setAllDays(arr);
@@ -83,9 +90,9 @@ export default CalendarMonthComponent = () => {
           return (
             <View
               key={item.id}
-              style={[styles.weekDayItem, {backgroundColor: Colors.orange}]}>
+              style={[styles.weekDayItem, {backgroundColor: Colors.white}]}>
               {item ? (
-                <Text style={[styles.weekDayTxt, {color: Colors.white}]}>
+                <Text style={[styles.weekDayTxt, {color: Colors.yellow}]}>
                   {item.short}
                 </Text>
               ) : null}
@@ -104,15 +111,41 @@ export default CalendarMonthComponent = () => {
           {allDays.map((item, index) => {
             return (
               <View
-                style={[styles.weekDayItem, {marginBottom: 5, height: 70}]}
+                style={[
+                  styles.dayItem,
+                  {
+                    opacity: item?.isCurrentMonth ? 1 : 0.3,
+                  },
+                ]}
                 key={index}>
-                <Text style={styles.daysTxt}>{item?.date}</Text>
+                <View style={[styles.upperLine]} />
+                <View style={styles.dateContainer}>
+                  {/* {item?.date ? <View style={styles.holidayIndicator} /> : null} */}
+                  <View
+                    style={[
+                      {
+                        backgroundColor: item?.isToday ? Colors.yellow : null,
+                      },
+                      styles.daysBackground,
+                    ]}>
+                    <Text
+                      style={[
+                        styles.daysTxt,
+                        {
+                          color: item?.isToday
+                            ? Colors.white
+                            : Colors.greyBlack,
+                        },
+                      ]}>
+                      {item?.date}
+                    </Text>
+                  </View>
+                </View>
               </View>
             );
           })}
         </View>
       )}
-      {/* <Text style={styles.daysTxt}>{}</Text> */}
     </View>
   );
 };
@@ -120,7 +153,7 @@ export default CalendarMonthComponent = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 5,
+    paddingHorizontal: RFValue(5),
   },
   loaderContainer: {
     flex: 1,
@@ -131,32 +164,66 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginBottom: 10,
+    marginBottom: RFValue(10),
   },
   weekDaysContainer: {
     flexDirection: 'row',
-    marginBottom: 10,
+    marginBottom: RFValue(10),
     flexWrap: 'wrap',
-    marginHorizontal: 5,
+    marginHorizontal: RFValue(5),
   },
   weekDayItem: {
     width: '12.8%',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.lightOrange,
+    backgroundColor: Colors.white,
     marginHorizontal: '0.74%',
-    // paddingVertical: 12,
-    height: 40,
-    borderRadius: 5,
+    height: RFValue(40),
+    borderRadius: RFValue(5),
+  },
+  dayItem: {
+    width: '12.8%',
+    backgroundColor: Colors.white,
+    marginHorizontal: '0.74%',
+    height: RFValue(40),
+    borderRadius: RFValue(5),
+    overflow: 'hidden',
+    marginBottom: RFValue(5),
+    height: RFValue(65),
+    alignItems: 'center',
   },
   weekDayTxt: {
-    fontSize: 14,
+    fontSize: RFValue(12),
     fontWeight: '700',
-    color: 'black',
+  },
+  daysBackground: {
+    height: 30,
+    width: 30,
+    borderRadius: RFValue(100),
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   daysTxt: {
-    fontSize: 14,
+    fontSize: RFValue(12),
     fontWeight: '500',
-    color: Colors.black,
+    color: Colors.greyBlue,
+  },
+  dateContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  upperLine: {
+    height: RFValue(16),
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    backgroundColor: Colors.yellow,
+  },
+  holidayIndicator: {
+    padding: RFValue(2),
+    marginBottom: RFValue(2),
+    backgroundColor: Colors.yellow,
+    borderRadius: RFValue(20),
   },
 });

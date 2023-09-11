@@ -17,7 +17,7 @@ export default CustomDrawer = ({navigation}) => {
     <View style={styles.container}>
       <StatusBar
         backgroundColor={'transparent'}
-        barStyle={'dark-content'}
+        barStyle={'light-content'}
         translucent
       />
       <SafeAreaView />
@@ -29,7 +29,7 @@ export default CustomDrawer = ({navigation}) => {
               styles.btn,
               {
                 backgroundColor:
-                  typeSelected === 'Daily' ? Colors.lightOrange : Colors.white,
+                  typeSelected === 'Daily' ? Colors.yellow : Colors.white,
               },
             ]}
             onPress={() => {
@@ -37,14 +37,20 @@ export default CustomDrawer = ({navigation}) => {
               navigation.closeDrawer();
             }}
             disabled={typeSelected === 'Daily'}>
-            <Text style={styles.btnText}>{'Daily'}</Text>
+            <Text
+              style={[
+                styles.btnText,
+                {color: typeSelected === 'Daily' ? Colors.white : Colors.black},
+              ]}>
+              {'Daily'}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[
               styles.btn,
               {
                 backgroundColor:
-                  typeSelected === 'Weekly' ? Colors.lightOrange : Colors.white,
+                  typeSelected === 'Weekly' ? Colors.yellow : Colors.white,
               },
             ]}
             onPress={() => {
@@ -52,16 +58,23 @@ export default CustomDrawer = ({navigation}) => {
               navigation.closeDrawer();
             }}
             disabled={typeSelected === 'Weekly'}>
-            <Text style={styles.btnText}>{'Weekly'}</Text>
+            <Text
+              style={[
+                styles.btnText,
+                {
+                  color:
+                    typeSelected === 'Weekly' ? Colors.white : Colors.black,
+                },
+              ]}>
+              {'Weekly'}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[
               styles.btn,
               {
                 backgroundColor:
-                  typeSelected === 'Monthly'
-                    ? Colors.lightOrange
-                    : Colors.white,
+                  typeSelected === 'Monthly' ? Colors.yellow : Colors.white,
               },
             ]}
             onPress={() => {
@@ -69,7 +82,16 @@ export default CustomDrawer = ({navigation}) => {
               navigation.closeDrawer();
             }}
             disabled={typeSelected === 'Monthly'}>
-            <Text style={styles.btnText}>{'Monthly'}</Text>
+            <Text
+              style={[
+                styles.btnText,
+                {
+                  color:
+                    typeSelected === 'Monthly' ? Colors.white : Colors.black,
+                },
+              ]}>
+              {'Monthly'}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -80,7 +102,7 @@ export default CustomDrawer = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.lightOrange,
+    backgroundColor: Colors.yellow,
     paddingTop: StatusBar.currentHeight,
   },
   topContainer: {
@@ -95,7 +117,6 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   btn: {
-    backgroundColor: Colors.white,
     paddingVertical: 12,
     paddingHorizontal: 15,
     marginRight: 15,

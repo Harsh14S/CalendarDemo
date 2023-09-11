@@ -5,17 +5,17 @@ import CalendarMonthComponent from './CalendarMonthComponent';
 import {CalendarContext} from '../../../global/CalendarContext';
 import CalendarWeekComponent from './CalendarWeekComponent';
 import CalendarDayComponent from './CalendarDayComponent';
+import {RFValue} from 'react-native-responsive-fontsize';
+import * as Colors from '../../assets/colors';
 // const date = new Date();
 export default CalendarComponent = () => {
-  const {title, setTitle, time, setTime, typeSelected, setTypeSelected} =
-    useContext(CalendarContext);
+  const {time, typeSelected} = useContext(CalendarContext);
   const date = new Date(time);
   const [totalDays, setTotalDays] = useState(
     DaysInMonth(date.getFullYear(), date.getMonth() + 1),
   );
   useEffect(() => {
     setTotalDays(DaysInMonth(date.getFullYear(), date.getMonth() + 1));
-    // console.log('totalDays -----> ', totalDays);
   }, [time]);
   return (
     <View style={styles.container}>
@@ -30,8 +30,7 @@ export default CalendarComponent = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 5,
-    // backgroundColor: 'lightgrey',
+    marginTop: RFValue(5),
   },
   weekDaysRow: {
     flexDirection: 'row',

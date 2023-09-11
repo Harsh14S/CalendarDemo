@@ -1,6 +1,8 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import IconLinks from '../../assets/icons/IconLinks';
+import {RFValue} from 'react-native-responsive-fontsize';
+import * as Colors from '../../assets/colors';
 
 export default CalendarHeader = ({navigation}) => {
   return (
@@ -15,11 +17,11 @@ export default CalendarHeader = ({navigation}) => {
         />
       </TouchableOpacity>
       <View style={styles.headerMidContainer}>
-        <Image
+        {/* <Image
           source={IconLinks.calendar}
           style={styles.calendarHeaderIcon}
           resizeMode="contain"
-        />
+        /> */}
         <Text style={styles.headerTitle}>{'Calendar'}</Text>
       </View>
       <TouchableOpacity style={styles.LRBtnContainer}>
@@ -37,8 +39,8 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginBottom: 10,
-    paddingHorizontal: 5,
+    marginBottom: RFValue(10),
+    paddingHorizontal: RFValue(5),
   },
   headerMidContainer: {
     flex: 1,
@@ -47,21 +49,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   calendarHeaderIcon: {
-    height: 25,
-    width: 25,
-    marginRight: 10,
+    height: RFValue(25),
+    width: RFValue(25),
+    marginRight: RFValue(10),
   },
   LRBtnContainer: {
-    paddingVertical: 10,
-    paddingHorizontal: 15,
+    paddingVertical: RFValue(10),
+    paddingHorizontal: RFValue(15),
   },
   LRIcon: {
-    height: 25,
-    width: 25,
+    height: RFValue(25),
+    width: RFValue(25),
+    tintColor: Colors.yellow,
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: RFValue(20),
     fontWeight: '700',
-    color: 'black',
+    color: Colors.white,
   },
 });

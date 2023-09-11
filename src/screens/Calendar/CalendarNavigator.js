@@ -2,8 +2,9 @@ import {StyleSheet, Text, TouchableOpacity, Image, View} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import IconLinks from '../../assets/icons/IconLinks';
 import moment from 'moment';
-import {nextPrevYear} from './CalendarFunctions';
 import {CalendarContext} from '../../../global/CalendarContext';
+import {RFValue} from 'react-native-responsive-fontsize';
+import * as Colors from '../../assets/colors';
 
 export default CalendarNavigator = () => {
   const {title, setTitle, time, setTime, month, setMonth, year, setYear} =
@@ -15,18 +16,13 @@ export default CalendarNavigator = () => {
     setTitle(moment(time).format('MMMM, YYYY'));
     setMonth(moment(time).format('MMMM'));
     setYear(moment(time).format('YYYY'));
-    // console.log(moment(time).format('MMMM'), moment(time).format('YYYY'));
   }, [time]);
 
   function backPress() {
-    // console.log(moment(time).subtract(1, 'month').format('MMMM, YYYY'));
-    // console.log(moment(time).format('MMMM, YYYY'));
     setTime(_time.setMonth(_time.getMonth() - 1));
   }
 
   function nextPress() {
-    // console.log(moment(time).add(1, 'month').format('MMMM, YYYY'));
-    // console.log(moment(time).format('MMMM, YYYY'));
     setTime(_time.setMonth(_time.getMonth() + 1));
   }
   return (
@@ -59,17 +55,18 @@ export default CalendarNavigator = () => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    marginHorizontal: 5,
-    marginBottom: 5,
+    marginHorizontal: RFValue(5),
+    marginBottom: RFValue(5),
   },
   calBackForwBtn: {
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 5,
+    paddingVertical: RFValue(10),
+    paddingHorizontal: RFValue(12),
+    borderRadius: RFValue(5),
   },
   calBackForwIcon: {
-    height: 20,
-    width: 20,
+    height: RFValue(18),
+    width: RFValue(18),
+    tintColor: Colors.yellow,
   },
   controlCenterContainer: {
     flex: 1,
@@ -77,8 +74,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   selectedTimeTxt: {
-    fontSize: 18,
-    fontWeight: '500',
-    color: 'black',
+    fontSize: RFValue(18),
+    fontWeight: '700',
+    color: Colors.white,
   },
 });

@@ -1,5 +1,6 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
+import {RFValue} from 'react-native-responsive-fontsize';
 
 const HomeScreen = ({navigation}) => {
   return (
@@ -32,32 +33,32 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: 'lightgrey',
     flexDirection: 'row',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingVertical: RFValue(10),
+    paddingHorizontal: RFValue(20),
     justifyContent: 'center',
-    marginBottom: 10,
+    marginBottom: RFValue(10),
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: RFValue(20),
     fontWeight: '700',
     color: 'black',
   },
   mainContainer: {
     flex: 1,
-    paddingTop: 20,
-    paddingHorizontal: 20,
+    paddingTop: RFValue(20),
+    paddingHorizontal: RFValue(20),
     justifyContent: 'center',
   },
   screenBtn: {
     width: '100%',
     backgroundColor: 'lightblue',
-    paddingVertical: 15,
-    paddingHorizontal: 10,
-    marginBottom: 15,
-    borderRadius: 5,
+    paddingVertical: RFValue(15),
+    paddingHorizontal: RFValue(10),
+    marginBottom: RFValue(15),
+    borderRadius: RFValue(5),
   },
   screenBtnTxt: {
-    fontSize: 15,
+    fontSize: RFValue(15),
     fontWeight: '500',
     color: 'black',
     textAlign: 'center',

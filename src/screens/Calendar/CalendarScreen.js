@@ -8,23 +8,20 @@ import {
   View,
 } from 'react-native';
 import React, {useContext, useState} from 'react';
-import IconLinks from '../../assets/icons/IconLinks';
-import moment from 'moment';
 import CalendarNavigator from './CalendarNavigator';
 import CalendarHeader from './CalendarHeader';
 import CalendarComponent from './CalendarComponent';
 import {CalendarContext} from '../../../global/CalendarContext';
+import * as Colors from '../../assets/colors';
 
 export default CalendarScreen = ({navigation}) => {
   const {title, setTitle, time, setTime, typeSelected, setTypeSelected} =
     useContext(CalendarContext);
-  // const [title, setTitle] = useState(moment().format('MMMM, YYYY'));
-  // const [time, setTime] = useState(new Date());
   return (
     <View style={styles.container}>
       <StatusBar
         backgroundColor={'transparent'}
-        barStyle={'dark-content'}
+        barStyle={'light-content'}
         translucent
       />
       <SafeAreaView />
@@ -51,6 +48,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: StatusBar.currentHeight,
+    backgroundColor: Colors.greyBlue,
   },
   mainContainer: {
     flex: 1,
