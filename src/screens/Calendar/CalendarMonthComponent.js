@@ -1,80 +1,48 @@
 import {
   ActivityIndicator,
   Dimensions,
+  FlatList,
+  Image,
   LayoutAnimation,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {weekDays} from './CalendarData';
 import {CalendarContext} from '../../../global/CalendarContext';
-import moment from 'moment';
 import * as Colors from '../../assets/colors';
 import {RFValue} from 'react-native-responsive-fontsize';
-
-const {width, height} = Dimensions.get('screen');
-const itemWidth = width / 8.1;
+import {useDispatch, useSelector} from 'react-redux';
+import MonthlyDatesAction from '../../redux/action/MonthlyDatesAction';
+import CalendarEventMondal from './CalendarEventModal';
+import IconLinks from '../../assets/icons/IconLinks';
 
 export default CalendarMonthComponent = () => {
-  const {
-    title,
-    setTitle,
-    time,
-    setTime,
-    typeSelected,
-    setTypeSelected,
-    month,
-    year,
-  } = useContext(CalendarContext);
+  const {time, enableAddEvent, setEnableAddEvent, setSelectedItem} =
+    useContext(CalendarContext);
+  const dispatch = useDispatch();
+  const MonthlyData = useSelector(state => state.getMonthlyData);
   const [allDays, setAllDays] = useState([]);
   const [showLoader, setShowLoader] = useState(true);
+  const [showEventModal, setShowEventModal] = useState(false);
+
+  function btn_addEvent(item) {
+    console.log(item);
+    setSelectedItem(item);
+    setEnableAddEvent(false);
+    setShowEventModal(true);
+  }
 
   useEffect(() => {
-    const totalDays = new Date(
-      new Date(time).getFullYear(),
-      new Date(time).getMonth() + 1,
-      0,
-    ).getDate();
-    const _time = new Date(
-      new Date(time).getFullYear(),
-      new Date(time).getMonth(),
-      1,
-    );
-    const isCurrentMonth =
-      moment(new Date()).format('MMMM') === moment(time).format('MMMM') &&
-      moment(new Date()).format('YYYY') === moment(time).format('YYYY');
+    if (MonthlyData) {
+      setAllDays(MonthlyData);
+    }
+  }, [MonthlyData]);
 
-    const emptyAdds = Number(moment(_time).format('d'));
-    const lastMonthDays = Number(
-      moment(time).subtract(1, 'month').daysInMonth(),
-    );
-    const nextMonthDays = Number(moment(time).add(1, 'month').daysInMonth());
-    const remainAdds =
-      Number(7 - ((emptyAdds + totalDays) % 7)) === 7
-        ? 0
-        : Number(7 - ((emptyAdds + totalDays) % 7));
-    let arr = [
-      ...new Array(emptyAdds).fill(0).map((item, index) => {
-        return {
-          date: lastMonthDays - emptyAdds + (index + 1),
-          isToday: false,
-          isCurrentMonth: false,
-        };
-      }),
-      ...new Array(totalDays).fill(0).map((item, index) => {
-        return {
-          date: index + 1,
-          isToday: new Date().getDate() === index + 1 && isCurrentMonth,
-          isCurrentMonth: true,
-        };
-      }),
-      ...new Array(remainAdds).fill(0).map((item, index) => {
-        return {date: index + 1, isToday: false, isCurrentMonth: false};
-      }),
-    ];
-
-    setAllDays(arr);
+  useEffect(() => {
+    dispatch(MonthlyDatesAction({time: time}));
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
   }, [time]);
 
@@ -86,19 +54,26 @@ export default CalendarMonthComponent = () => {
   return (
     <View style={styles.container}>
       <View style={styles.weekDaysContainer}>
-        {weekDays.map(item => {
-          return (
-            <View
-              key={item.id}
-              style={[styles.weekDayItem, {backgroundColor: Colors.white}]}>
-              {item ? (
-                <Text style={[styles.weekDayTxt, {color: Colors.yellow}]}>
-                  {item.short}
-                </Text>
-              ) : null}
-            </View>
-          );
-        })}
+        <FlatList
+          data={weekDays}
+          scrollEnabled={false}
+          numColumns={7}
+          extraData={weekDays}
+          keyExtractor={(item, index) => index}
+          renderItem={({item, index}) => {
+            return (
+              <View
+                key={item.id}
+                style={[styles.weekDayItem, {backgroundColor: Colors.white}]}>
+                {item ? (
+                  <Text style={[styles.weekDayTxt, {color: Colors.yellow}]}>
+                    {item.short}
+                  </Text>
+                ) : null}
+              </View>
+            );
+          }}
+        />
       </View>
       {showLoader ? (
         <ActivityIndicator
@@ -108,26 +83,44 @@ export default CalendarMonthComponent = () => {
         />
       ) : (
         <View style={styles.weekDaysContainer}>
-          {allDays.map((item, index) => {
-            return (
-              <View
-                style={[
-                  styles.dayItem,
-                  {
-                    opacity: item?.isCurrentMonth ? 1 : 0.3,
-                  },
-                ]}
-                key={index}>
-                <View style={[styles.upperLine]} />
-                <View style={styles.dateContainer}>
-                  {/* {item?.date ? <View style={styles.holidayIndicator} /> : null} */}
+          <FlatList
+            data={allDays}
+            scrollEnabled={false}
+            numColumns={7}
+            extraData={MonthlyData}
+            keyExtractor={(item, index) => index}
+            renderItem={({item, index}) => {
+              return (
+                <TouchableOpacity
+                  onPress={() => btn_addEvent(item)}
+                  disabled={
+                    item?.isSelectedMonth
+                      ? enableAddEvent
+                        ? false
+                        : true
+                      : true
+                  }
+                  style={[
+                    styles.dayItem,
+                    {
+                      opacity: item?.isSelectedMonth ? 1 : 0.3,
+                      backgroundColor: item?.isToday
+                        ? Colors.yellow
+                        : Colors.white,
+                    },
+                  ]}
+                  key={index}>
                   <View
                     style={[
+                      styles.upperLine,
                       {
-                        backgroundColor: item?.isToday ? Colors.yellow : null,
+                        backgroundColor: item?.isToday
+                          ? Colors.white
+                          : Colors.yellow,
                       },
-                      styles.daysBackground,
-                    ]}>
+                    ]}
+                  />
+                  <View style={styles.dateContainer}>
                     <Text
                       style={[
                         styles.daysTxt,
@@ -135,17 +128,47 @@ export default CalendarMonthComponent = () => {
                           color: item?.isToday
                             ? Colors.white
                             : Colors.greyBlack,
+                          fontWeight: item?.isToday ? '700' : '500',
                         },
                       ]}>
-                      {item?.date}
+                      {item?.day}
                     </Text>
+                    <View
+                      style={[
+                        styles.holidayIndicator,
+                        {
+                          backgroundColor: true
+                            ? item?.isToday
+                              ? Colors.white
+                              : Colors.yellow
+                            : item?.isToday
+                            ? Colors.yellow
+                            : Colors.white,
+                        },
+                      ]}
+                    />
                   </View>
-                </View>
-              </View>
-            );
-          })}
+                </TouchableOpacity>
+              );
+            }}
+          />
         </View>
       )}
+      {enableAddEvent ? (
+        <Text
+          style={{
+            fontSize: RFValue(20),
+            color: Colors.white,
+            fontWeight: '700',
+            textAlign: 'center',
+          }}>
+          {'Select a date to add Event'}
+        </Text>
+      ) : null}
+      <CalendarEventMondal
+        visible={showEventModal}
+        setShowEventModal={setShowEventModal}
+      />
     </View>
   );
 };
@@ -196,20 +219,13 @@ const styles = StyleSheet.create({
     fontSize: RFValue(12),
     fontWeight: '700',
   },
-  daysBackground: {
-    height: 30,
-    width: 30,
-    borderRadius: RFValue(100),
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   daysTxt: {
     fontSize: RFValue(12),
     fontWeight: '500',
     color: Colors.greyBlue,
   },
   dateContainer: {
-    flex: 1,
+    flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -218,12 +234,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    backgroundColor: Colors.yellow,
+    borderBottomWidth: 0.5,
   },
   holidayIndicator: {
-    padding: RFValue(2),
-    marginBottom: RFValue(2),
-    backgroundColor: Colors.yellow,
+    padding: RFValue(2.2),
+    marginTop: RFValue(2),
     borderRadius: RFValue(20),
   },
 });

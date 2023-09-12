@@ -8,11 +8,12 @@ import {
   View,
 } from 'react-native';
 import React, {useContext, useState} from 'react';
-import CalendarNavigator from './CalendarNavigator';
+import CalendarNavigator from './CalendarDirection';
 import CalendarHeader from './CalendarHeader';
 import CalendarComponent from './CalendarComponent';
 import {CalendarContext} from '../../../global/CalendarContext';
 import * as Colors from '../../assets/colors';
+import CalendarEventMondal from './CalendarEventModal';
 
 export default CalendarScreen = ({navigation}) => {
   const {title, setTitle, time, setTime, typeSelected, setTypeSelected} =
