@@ -6,13 +6,38 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {CalendarContext} from '../../global/CalendarContext';
 import * as Colors from '../assets/colors';
+import {RFValue} from 'react-native-responsive-fontsize';
+import AlertModal from '../components/AlertModal';
+import {useDispatch} from 'react-redux';
+import MonthlyDatesAction from '../redux/action/MonthlyDatesAction';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default CustomDrawer = ({navigation}) => {
-  const {title, setTitle, time, setTime, typeSelected, setTypeSelected} =
-    useContext(CalendarContext);
+  const [showModal, setShowModal] = useState(false);
+  const {time, typeSelected, setTypeSelected} = useContext(CalendarContext);
+  const dispatch = useDispatch();
+
+  function btn_alertClose() {
+    setShowModal(false);
+  }
+  async function btn_alertOk() {
+    setShowModal(false);
+    try {
+      await AsyncStorage.clear()
+        .then(() => {
+          dispatch(MonthlyDatesAction({time}));
+        })
+        .catch(e => {
+          console.log('Clear Data Error 2 ----> ', e);
+        });
+    } catch (error) {
+      console.log('Clear Data Error ----> ', error);
+    }
+  }
+
   return (
     <View style={styles.container}>
       <StatusBar
@@ -94,7 +119,25 @@ export default CustomDrawer = ({navigation}) => {
             </Text>
           </TouchableOpacity>
         </View>
+        <TouchableOpacity
+          style={styles.clearDataBtn}
+          onPress={() => {
+            setShowModal(true);
+            navigation.closeDrawer();
+          }}>
+          <Text style={styles.clearDataBtnTxt}>{'Clear Memory'}</Text>
+        </TouchableOpacity>
       </View>
+      <AlertModal
+        visible={showModal}
+        alertMsg={
+          'Are you sure you want clear all Events data? You will not be able to revert this action.'
+        }
+        primBtnTxt={'Cancel'}
+        primBtnFunc={() => btn_alertClose()}
+        secBtnTxt={'Ok'}
+        secBtnFunc={() => btn_alertOk()}
+      />
     </View>
   );
 };
@@ -102,7 +145,7 @@ export default CustomDrawer = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.yellow,
+    backgroundColor: Colors.greyBlue,
     paddingTop: StatusBar.currentHeight,
   },
   topContainer: {
@@ -113,20 +156,37 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   btnContainer: {
+    flex: 1,
     // backgroundColor: Colors.lightOrange,
-    marginVertical: 20,
+    marginVertical: RFValue(20),
   },
   btn: {
-    paddingVertical: 12,
-    paddingHorizontal: 15,
-    marginRight: 15,
-    borderTopRightRadius: 100,
-    borderBottomRightRadius: 100,
-    marginBottom: 10,
+    paddingVertical: RFValue(10),
+    paddingHorizontal: RFValue(15),
+    marginRight: RFValue(15),
+    borderTopRightRadius: RFValue(100),
+    borderBottomRightRadius: RFValue(100),
+    marginBottom: RFValue(10),
   },
   btnText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: 'black',
+    fontSize: RFValue(12),
+    fontWeight: '700',
+    color: Colors.black,
+  },
+  clearDataBtn: {
+    paddingVertical: RFValue(10),
+    paddingHorizontal: RFValue(15),
+    marginHorizontal: RFValue(15),
+    borderTopRightRadius: RFValue(100),
+    borderBottomRightRadius: RFValue(100),
+    marginBottom: RFValue(20),
+    backgroundColor: Colors.greyBlue,
+    borderRadius: RFValue(100),
+  },
+  clearDataBtnTxt: {
+    fontSize: RFValue(14),
+    fontWeight: '700',
+    color: Colors.white,
+    textAlign: 'center',
   },
 });

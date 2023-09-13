@@ -13,7 +13,7 @@ import CalendarHeader from './CalendarHeader';
 import CalendarComponent from './CalendarComponent';
 import {CalendarContext} from '../../../global/CalendarContext';
 import * as Colors from '../../assets/colors';
-import CalendarEventMondal from './CalendarEventModal';
+import CalendarEventMondal from './CalendarEventActionModal';
 
 export default CalendarScreen = ({navigation}) => {
   const {title, setTitle, time, setTime, typeSelected, setTypeSelected} =

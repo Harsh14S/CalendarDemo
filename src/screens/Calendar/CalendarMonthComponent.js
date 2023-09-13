@@ -16,8 +16,9 @@ import * as Colors from '../../assets/colors';
 import {RFValue} from 'react-native-responsive-fontsize';
 import {useDispatch, useSelector} from 'react-redux';
 import MonthlyDatesAction from '../../redux/action/MonthlyDatesAction';
-import CalendarEventMondal from './CalendarEventModal';
+import CalendarEventActionModal from './CalendarEventActionModal';
 import IconLinks from '../../assets/icons/IconLinks';
+import CalendarEventShowModal from './CalendarEventShowModal';
 
 export default CalendarMonthComponent = () => {
   const {time, enableAddEvent, setEnableAddEvent, setSelectedItem} =
@@ -27,11 +28,16 @@ export default CalendarMonthComponent = () => {
   const AddEventData = useSelector(state => state.addEventData);
   const [allDays, setAllDays] = useState([]);
   const [showLoader, setShowLoader] = useState(true);
+  const [showAddEventModal, setShowAddEventModal] = useState(false);
   const [showEventModal, setShowEventModal] = useState(false);
 
   function btn_addEvent(item) {
     setSelectedItem(item);
     setEnableAddEvent(false);
+    setShowAddEventModal(true);
+  }
+  function btn_showEvents(item) {
+    setSelectedItem(item);
     setShowEventModal(true);
   }
 
@@ -90,7 +96,7 @@ export default CalendarMonthComponent = () => {
           style={styles.loaderContainer}
         />
       ) : (
-        <View style={styles.weekDaysContainer}>
+        <View style={styles.datesContainer}>
           <FlatList
             data={allDays}
             scrollEnabled={false}
@@ -100,14 +106,9 @@ export default CalendarMonthComponent = () => {
             renderItem={({item, index}) => {
               return (
                 <TouchableOpacity
-                  onPress={() => btn_addEvent(item)}
-                  disabled={
-                    item?.isSelectedMonth
-                      ? enableAddEvent
-                        ? false
-                        : true
-                      : true
-                  }
+                  onPress={() => btn_showEvents(item)}
+                  onLongPress={() => btn_addEvent(item)}
+                  disabled={item?.isSelectedMonth ? false : true}
                   style={[
                     styles.dayItem,
                     {
@@ -161,20 +162,17 @@ export default CalendarMonthComponent = () => {
           />
         </View>
       )}
-      {enableAddEvent ? (
-        <Text
-          style={{
-            fontSize: RFValue(20),
-            color: Colors.white,
-            fontWeight: '700',
-            textAlign: 'center',
-          }}>
-          {'Select a date to add Event'}
-        </Text>
-      ) : null}
-      <CalendarEventMondal
+      <Text style={styles.hintTxt}>
+        {'*Single press to view event & Long press to add event'}
+      </Text>
+
+      <CalendarEventActionModal
+        visible={showAddEventModal}
+        setShowModal={setShowAddEventModal}
+      />
+      <CalendarEventShowModal
         visible={showEventModal}
-        setShowEventModal={setShowEventModal}
+        setShowModal={setShowEventModal}
       />
     </View>
   );
@@ -210,6 +208,11 @@ const styles = StyleSheet.create({
     marginHorizontal: '0.74%',
     height: RFValue(40),
     borderRadius: RFValue(5),
+  },
+  datesContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginHorizontal: RFValue(5),
   },
   dayItem: {
     width: '12.8%',
@@ -247,5 +250,12 @@ const styles = StyleSheet.create({
     padding: RFValue(2.2),
     marginTop: RFValue(2),
     borderRadius: RFValue(20),
+  },
+  hintTxt: {
+    marginHorizontal: RFValue(5),
+    fontSize: RFValue(12),
+    color: Colors.white,
+    fontWeight: '500',
+    textAlign: 'center',
   },
 });

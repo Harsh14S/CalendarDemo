@@ -19,7 +19,9 @@ async function getEvents() {
 
 async function finalData(time) {
   const allEvents = await getEvents();
-  // console.log(JSON.stringify(allEvents));
+
+  if (allEvents) {
+  }
   const totalDays = new Date(
     new Date(time).getFullYear(),
     new Date(time).getMonth() + 1,
@@ -51,8 +53,11 @@ async function finalData(time) {
       day,
     ).getTime();
     const date = moment(timestamp).format('YYYY-MM-DD');
-    let dayEvent = allEvents.find(item => item.date === date);
-    events = dayEvent ? dayEvent.events : [];
+
+    let dayEvent = allEvents
+      ? allEvents.find(item => item.date === date)
+      : null;
+    let events = dayEvent ? dayEvent.events : [];
     return {
       day,
       isToday: false,
@@ -71,8 +76,10 @@ async function finalData(time) {
       day,
     ).getTime();
     const date = moment(timestamp).format('YYYY-MM-DD');
-    let dayEvent = allEvents.find(item => item.date === date);
-    events = dayEvent ? dayEvent.events : [];
+    let dayEvent = allEvents
+      ? allEvents.find(item => item.date === date)
+      : null;
+    let events = dayEvent ? dayEvent.events : [];
     // console.log('events ----> ', events);
     return {
       day,
@@ -92,8 +99,10 @@ async function finalData(time) {
       day,
     ).getTime();
     const date = moment(timestamp).format('YYYY-MM-DD');
-    let dayEvent = allEvents.find(item => item.date === date);
-    events = dayEvent ? dayEvent.events : [];
+    let dayEvent = allEvents
+      ? allEvents.find(item => item.date === date)
+      : null;
+    let events = dayEvent ? dayEvent.events : [];
     return {
       day,
       isToday: false,

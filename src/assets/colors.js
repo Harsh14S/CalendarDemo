@@ -5,3 +5,4 @@ export const greyBlue = '#242F40';
 export const yellow = '#CCA43B';
 export const greyLight = '#E5E5E5';
 export const white = '#FFFFFF';
+export const modalBackTrans = '#000000AA';

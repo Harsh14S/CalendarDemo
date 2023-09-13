@@ -19,7 +19,7 @@ import {CalendarContext} from '../../../global/CalendarContext';
 import {useDispatch} from 'react-redux';
 import AddEventAction from '../../redux/action/AddEventAction';
 
-export default CalendarEventModal = ({visible, setShowEventModal}) => {
+export default CalendarEventActionModal = ({visible, setShowModal}) => {
   const {selectedItem, setSelectedItem, time} = useContext(CalendarContext);
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
@@ -42,7 +42,7 @@ export default CalendarEventModal = ({visible, setShowEventModal}) => {
     btn_close();
   }
   function btn_close() {
-    setShowEventModal(false);
+    setShowModal(false);
     setSelectedItem(null);
     setEventTitle('');
     setEventDescription('');
