@@ -16,25 +16,42 @@ import moment from 'moment';
 import IconLinks from '../../assets/icons/IconLinks';
 import {useIsFocused} from '@react-navigation/native';
 import {CalendarContext} from '../../../global/CalendarContext';
+import {useDispatch} from 'react-redux';
+import AddEventAction from '../../redux/action/AddEventAction';
 
 export default CalendarEventModal = ({visible, setShowEventModal}) => {
-  const {selectedItem, setSelectedItem} = useContext(CalendarContext);
+  const {selectedItem, setSelectedItem, time} = useContext(CalendarContext);
+  const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const [btnDisable, setBtnDisable] = useState(true);
   const [eventTitle, setEventTitle] = useState('');
   const [eventDescription, setEventDescription] = useState('');
-  const [time, setTime] = useState(new Date());
+  const [currentTime, setCurrentTime] = useState(new Date());
 
-  function btn_addEvent() {}
+  function btn_addEvent() {
+    const eventObj = {
+      title: eventTitle.trim(),
+      description: eventDescription.trim(),
+      date: selectedItem?.date,
+      time: time,
+      timeStamp: currentTime.getTime(),
+      type: 0,
+      typeTitle: 'Other',
+    };
+    dispatch(AddEventAction(eventObj));
+    btn_close();
+  }
   function btn_close() {
     setShowEventModal(false);
     setSelectedItem(null);
+    setEventTitle('');
+    setEventDescription('');
   }
 
   useEffect(() => {
     if (isFocused) {
       setInterval(() => {
-        setTime(new Date());
+        setCurrentTime(new Date());
       }, 1000);
     }
   }, [isFocused]);
@@ -71,7 +88,7 @@ export default CalendarEventModal = ({visible, setShowEventModal}) => {
                     <Image style={styles.iconStyle} source={IconLinks.clock} />
                   </View>
                   <Text style={styles.dateTxt}>
-                    {moment(time).format('HH:mm:ss')}
+                    {moment(currentTime).format('HH:mm:ss')}
                   </Text>
                 </View>
                 <View style={styles.dateContainer}>

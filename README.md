@@ -16,6 +16,7 @@
 1. redux
 2. react-redux
 3. @reduxjs/toolkit
+4. redux-saga
 
 <!-- accessing img -->
 

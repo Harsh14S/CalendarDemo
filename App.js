@@ -8,11 +8,16 @@ import * as Colors from './src/assets/colors';
 import {Provider} from 'react-redux';
 import {configureStore} from '@reduxjs/toolkit';
 import {RootReducer} from './src/redux/reducer/reduxIndex';
-
+import createSagaMiddleware from 'redux-saga';
+import sagaIndex from './src/redux/saga/sagaIndex';
+const sagaMiddleware = createSagaMiddleware();
 const App = () => {
   const store = configureStore({
     reducer: RootReducer,
+    middleware: getDefaultMiddleware =>
+      getDefaultMiddleware().concat(sagaMiddleware),
   });
+  sagaMiddleware.run(sagaIndex);
 
   return (
     <Provider store={store}>

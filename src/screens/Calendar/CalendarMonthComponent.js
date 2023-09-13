@@ -24,22 +24,16 @@ export default CalendarMonthComponent = () => {
     useContext(CalendarContext);
   const dispatch = useDispatch();
   const MonthlyData = useSelector(state => state.getMonthlyData);
+  const AddEventData = useSelector(state => state.addEventData);
   const [allDays, setAllDays] = useState([]);
   const [showLoader, setShowLoader] = useState(true);
   const [showEventModal, setShowEventModal] = useState(false);
 
   function btn_addEvent(item) {
-    console.log(item);
     setSelectedItem(item);
     setEnableAddEvent(false);
     setShowEventModal(true);
   }
-
-  useEffect(() => {
-    if (MonthlyData) {
-      setAllDays(MonthlyData);
-    }
-  }, [MonthlyData]);
 
   useEffect(() => {
     dispatch(MonthlyDatesAction({time: time}));
@@ -47,10 +41,24 @@ export default CalendarMonthComponent = () => {
   }, [time]);
 
   useEffect(() => {
+    if (MonthlyData) {
+      // console.log('MonthlyData ---> ', MonthlyData);
+      setAllDays(MonthlyData);
+    }
+  }, [MonthlyData]);
+
+  useEffect(() => {
+    if (AddEventData.success) {
+      dispatch(MonthlyDatesAction({time: time}));
+    }
+  }, [AddEventData]);
+
+  useEffect(() => {
     if (allDays.length) {
       setShowLoader(false);
     }
   }, [allDays]);
+
   return (
     <View style={styles.container}>
       <View style={styles.weekDaysContainer}>
@@ -128,6 +136,7 @@ export default CalendarMonthComponent = () => {
                           color: item?.isToday
                             ? Colors.white
                             : Colors.greyBlack,
+
                           fontWeight: item?.isToday ? '700' : '500',
                         },
                       ]}>
@@ -137,13 +146,11 @@ export default CalendarMonthComponent = () => {
                       style={[
                         styles.holidayIndicator,
                         {
-                          backgroundColor: true
+                          backgroundColor: item?.events?.length
                             ? item?.isToday
                               ? Colors.white
                               : Colors.yellow
-                            : item?.isToday
-                            ? Colors.yellow
-                            : Colors.white,
+                            : null,
                         },
                       ]}
                     />
