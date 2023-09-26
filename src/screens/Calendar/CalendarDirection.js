@@ -7,8 +7,17 @@ import {RFValue} from 'react-native-responsive-fontsize';
 import * as Colors from '../../assets/colors';
 
 export default CalendarNavigator = () => {
-  const {title, setTitle, time, setTime, month, setMonth, year, setYear} =
-    useContext(CalendarContext);
+  const {
+    title,
+    setTitle,
+    time,
+    setTime,
+    month,
+    setMonth,
+    year,
+    setYear,
+    typeSelected,
+  } = useContext(CalendarContext);
   const [_time, set_time] = useState(new Date(time));
 
   useEffect(() => {
@@ -19,11 +28,29 @@ export default CalendarNavigator = () => {
   }, [time]);
 
   function backPress() {
-    setTime(_time.setMonth(_time.getMonth() - 1));
+    if (typeSelected === 'Monthly') {
+      setTime(_time.setMonth(_time.getMonth() - 1));
+    } else if (typeSelected === 'Weekly') {
+      const weekDayNum = Number(moment(time).format('d'));
+      if (weekDayNum !== 0) {
+        setTime(_time.setDate(_time.getDate() - 7 - weekDayNum));
+      } else {
+        setTime(_time.setDate(_time.getDate() - 7));
+      }
+    }
   }
 
   function nextPress() {
-    setTime(_time.setMonth(_time.getMonth() + 1));
+    if (typeSelected === 'Monthly') {
+      setTime(_time.setMonth(_time.getMonth() + 1));
+    } else if (typeSelected === 'Weekly') {
+      const weekDayNum = Number(moment(time).format('d'));
+      if (weekDayNum !== 0) {
+        setTime(_time.setDate(_time.getDate() + 7 - weekDayNum));
+      } else {
+        setTime(_time.setDate(_time.getDate() + 7));
+      }
+    }
   }
   return (
     <View style={styles.container}>

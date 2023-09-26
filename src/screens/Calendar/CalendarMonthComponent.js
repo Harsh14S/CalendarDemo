@@ -47,7 +47,7 @@ export default CalendarMonthComponent = () => {
   }, [time]);
 
   useEffect(() => {
-    if (MonthlyData) {
+    if (MonthlyData.length) {
       // console.log('MonthlyData ---> ', MonthlyData);
       setAllDays(MonthlyData);
     }
@@ -99,6 +99,7 @@ export default CalendarMonthComponent = () => {
         <View style={styles.datesContainer}>
           <FlatList
             data={allDays}
+            overScrollMode="always"
             scrollEnabled={false}
             numColumns={7}
             extraData={MonthlyData}

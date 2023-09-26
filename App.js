@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import {StyleSheet} from 'react-native';
 import React from 'react';
 import Router from './src/navigation/Router';
@@ -10,6 +11,8 @@ import {configureStore} from '@reduxjs/toolkit';
 import {RootReducer} from './src/redux/reducer/reduxIndex';
 import createSagaMiddleware from 'redux-saga';
 import sagaIndex from './src/redux/saga/sagaIndex';
+import CalendarView from './src/screens/EventCalendar/CalendarView';
+import {HeaderRefContextProvider} from './src/screens/EventCalendar/utils/HorizontalScroll';
 const sagaMiddleware = createSagaMiddleware();
 const App = () => {
   const store = configureStore({
@@ -22,9 +25,12 @@ const App = () => {
   return (
     <Provider store={store}>
       <CalendarContextProvider>
-        <SafeAreaProvider style={styles.container}>
-          <Router />
-        </SafeAreaProvider>
+        <HeaderRefContextProvider>
+          <SafeAreaProvider style={styles.container}>
+            {/* <Router /> */}
+            <CalendarView />
+          </SafeAreaProvider>
+        </HeaderRefContextProvider>
       </CalendarContextProvider>
     </Provider>
   );

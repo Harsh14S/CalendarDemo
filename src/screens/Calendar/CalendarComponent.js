@@ -7,7 +7,7 @@ import CalendarWeekComponent from './CalendarWeekComponent';
 import CalendarDayComponent from './CalendarDayComponent';
 import {RFValue} from 'react-native-responsive-fontsize';
 import * as Colors from '../../assets/colors';
-// const date = new Date();
+
 export default CalendarComponent = () => {
   const {time, typeSelected} = useContext(CalendarContext);
   const date = new Date(time);
@@ -22,6 +22,7 @@ export default CalendarComponent = () => {
       {typeSelected === 'Monthly' ? <CalendarMonthComponent /> : null}
       {typeSelected === 'Weekly' ? <CalendarWeekComponent /> : null}
       {typeSelected === 'Daily' ? <CalendarDayComponent /> : null}
+      {/* {typeSelected === 'Daily' ? <CustomDayView /> : null} */}
       <View style={styles.weekDaysRow}></View>
     </View>
   );

@@ -2,7 +2,6 @@ import {
   Dimensions,
   Image,
   Modal,
-  StatusBar,
   StyleSheet,
   Text,
   TextInput,
@@ -21,12 +20,14 @@ import AddEventAction from '../../redux/action/AddEventAction';
 
 export default CalendarEventActionModal = ({visible, setShowModal}) => {
   const {selectedItem, setSelectedItem, time} = useContext(CalendarContext);
+  const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const [btnDisable, setBtnDisable] = useState(true);
   const [eventTitle, setEventTitle] = useState('');
   const [eventDescription, setEventDescription] = useState('');
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   function btn_addEvent() {
     const eventObj = {
@@ -74,7 +75,7 @@ export default CalendarEventActionModal = ({visible, setShowModal}) => {
         <View style={styles.modalMainView}>
           <View style={styles.container}>
             <View style={styles.modalHeaderContainer}>
-              <Text style={styles.headerTxt}>Add Event</Text>
+              <Text style={styles.headerTxt}>{'Add Event'}</Text>
               <TouchableOpacity
                 style={styles.closeBtn}
                 onPress={() => btn_close()}>
@@ -120,6 +121,16 @@ export default CalendarEventActionModal = ({visible, setShowModal}) => {
                 numberOfLines={4}
                 // placeholderTextColor={Colors.greyLight}
               />
+              <View style={styles.btnContainer}>
+                <TouchableOpacity
+                  onPress={() => setOpen(true)}
+                  // disabled={btnDisable}
+                  style={styles.addBtn}
+                  activeOpacity={0.8}>
+                  <Text style={styles.addBtnTxt}>{'Date Picker'}</Text>
+                </TouchableOpacity>
+              </View>
+              {/* <CustomDatePicker open={open} setOpen={setOpen} /> */}
             </View>
             <View style={styles.btnContainer}>
               <TouchableOpacity
@@ -127,7 +138,7 @@ export default CalendarEventActionModal = ({visible, setShowModal}) => {
                 disabled={btnDisable}
                 style={[styles.addBtn, {opacity: btnDisable ? 0.5 : 1}]}
                 activeOpacity={0.8}>
-                <Text style={styles.addBtnTxt}>Add Event</Text>
+                <Text style={styles.addBtnTxt}>{'Add'}</Text>
               </TouchableOpacity>
             </View>
           </View>

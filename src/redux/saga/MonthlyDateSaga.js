@@ -20,8 +20,6 @@ async function getEvents() {
 async function finalData(time) {
   const allEvents = await getEvents();
 
-  if (allEvents) {
-  }
   const totalDays = new Date(
     new Date(time).getFullYear(),
     new Date(time).getMonth() + 1,

@@ -28,3 +28,7 @@
 1. moment
 2. react-native-responsive-fontsize
 3. @react-native-async-storage/async-storage
+4. react-native-week-view
+5. react-native-modal-datetime-picker
+6. @react-native-community/datetimepicker
+7. react-native-date-picker

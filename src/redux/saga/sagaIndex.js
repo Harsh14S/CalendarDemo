@@ -3,6 +3,7 @@ import MonthlyDateSaga from './MonthlyDateSaga';
 import AddEventSaga from './AddEventSaga';
 import RemoveEventSaga from './RemoveEventSaga';
 import EditEventSaga from './EditEventSaga';
+import WeeklyDateSaga from './WeeklyDateSaga';
 
 export default function* sagaIndex() {
   yield all([
@@ -10,5 +11,6 @@ export default function* sagaIndex() {
     AddEventSaga(),
     RemoveEventSaga(),
     EditEventSaga(),
+    WeeklyDateSaga(),
   ]);
 }

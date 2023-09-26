@@ -44,7 +44,7 @@ export default CalendarEventShowModal = ({visible, setShowModal}) => {
   useEffect(() => {
     if (selectedItem) {
       if (selectedItem?.events) {
-        console.log('selectedItem ----> ', selectedItem?.events);
+        // console.log('selectedItem ----> ', selectedItem?.events);
         setEvents(selectedItem?.events);
       }
     }
